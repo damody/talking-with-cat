@@ -16,6 +16,8 @@ class AVG_API UAVGBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = "Tools")
-	static	TArray<FVector2D> Make2DposArray(int32 s1, int32 s2);
-	
+	static	TArray<FVector2D> Make2DposArray(int32 size1, int32 size2);
+
+	UFUNCTION(BlueprintCallable, Category = "Tools")
+	static	TArray<FString> SplitCheaper(FString longString);
 };

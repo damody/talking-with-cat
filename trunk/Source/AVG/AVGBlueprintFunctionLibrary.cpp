@@ -16,4 +16,28 @@ TArray<FVector2D> UAVGBlueprintFunctionLibrary::Make2DposArray(int32 s1, int32 s
 	return res;
 }
 
+TArray<FString> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString)
+{
+	TArray<FString> res;
+	int nextline = 0;
+	int last = 0;
+	for (int i = 0; i < longString.Len(); ++i)
+	{
+		TCHAR n = longString[i];
+		if (n == '\n')
+		{
+			nextline++;
+		}
+		if (nextline >= 3 || i == longString.Len() - 1)
+		{
+			FString text;
+			text = longString.Mid(last, i - last + 1);
+			res.Add(text);
+			last = i;
+			nextline = 0;
+		}
+	}
+	return res;
+}
+
 
