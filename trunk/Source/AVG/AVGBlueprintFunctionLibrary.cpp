@@ -2,6 +2,8 @@
 
 #include "AVG.h"
 #include "AVGBlueprintFunctionLibrary.h"
+// for GEngine
+#include "Engine.h"
 
 TArray<FVector2D> UAVGBlueprintFunctionLibrary::Make2DposArray(int32 s1, int32 s2)
 {
@@ -44,10 +46,11 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
 {
 	TArray<UTextPage*> res;
 	int nextline = 0;
-	int last = 0;
+	int last = -1;
 	for (int i = 3; i < longString.Len(); ++i)
 	{
 		TCHAR n = longString[i];
+		// 連續換行等於空一行
 		if (longString[i-2] == '\n' && longString[i-1] == '\r' && longString[i] == '\n')
 		{
 			nextline++;
@@ -55,10 +58,50 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
 		if (nextline > 0 || i == longString.Len() - 1)
 		{
 			UTextPage* tmp = NewObject<UTextPage>();
+			tmp->HasCommend = false;
+			tmp->Effect = NewObject<UAVGCommend>();
 			FString text;
 			text = longString.Mid(last + 1, i - last-1);
 			tmp->ShowText = text;
-			res.Push(tmp);
+			int32 findchr = 0;
+			if (text[0] == L'《')
+			{
+				tmp->Effect = NewObject<UAVGCommend>();
+				FString commend = text.Mid(1, text.Len() - 5);
+				commend = commend.ToLower();
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, commend);
+				if (commend == "inside story")
+				{
+					tmp->HasCommend = true;
+					tmp->Effect->EffectId = ETextEffectEnum::InsideStory;
+				}
+				else if (commend == "light curtain")
+				{
+					tmp->HasCommend = true;
+					tmp->Effect->EffectId = ETextEffectEnum::LightCurtain;
+				}
+				else if (commend.Left(4) == "wait")
+				{
+
+				}
+				else if (commend.Left(12) == "screen flash")
+				{
+
+				}
+				else if (commend.Left(3) == "bgm")
+				{
+
+				}
+			}
+			else if (text.FindChar(L'：', findchr))
+			{
+				tmp->ShowName = text.Left(findchr);
+			}
+			// 註解
+			if (text[0] != L'#')
+			{
+				res.Push(tmp);
+			}
 			last = i;
 			nextline = 0;
 		}

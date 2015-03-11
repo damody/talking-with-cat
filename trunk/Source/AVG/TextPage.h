@@ -5,20 +5,10 @@
 //#include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameFramework/Actor.h"
 #include "Engine/EngineTypes.h"
+#include "AVGCommend.h"
 #include "TextPage.generated.h"
 
 
-UENUM(BlueprintType)
-enum class ETextEffectEnum : uint8
-{
-	Flash,
-	Wait,
-	AutomaticSAVE,
-	Yen,
-	Fonts,
-	FontsSize,
-
-};
 
 /**
  * 
@@ -30,8 +20,14 @@ class AVG_API UTextPage : public UObject
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
+	FString ShowName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
 	FString ShowText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
-	ETextEffectEnum Effect;
+	bool HasCommend;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
+	UAVGCommend* Effect;
 };
