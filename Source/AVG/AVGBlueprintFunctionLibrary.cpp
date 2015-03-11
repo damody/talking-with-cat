@@ -16,7 +16,7 @@ TArray<FVector2D> UAVGBlueprintFunctionLibrary::Make2DposArray(int32 s1, int32 s
 	return res;
 }
 
-TArray<FString> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString)
+TArray<FString> UAVGBlueprintFunctionLibrary::SplitCheaper3line(FString longString)
 {
 	TArray<FString> res;
 	int nextline = 0;
@@ -31,7 +31,7 @@ TArray<FString> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString)
 		if (nextline >= 3 || i == longString.Len() - 1)
 		{
 			FString text;
-			text = longString.Mid(last, i - last + 1);
+			text = longString.Mid(last + 1, i - last);
 			res.Add(text);
 			last = i;
 			nextline = 0;
@@ -40,4 +40,28 @@ TArray<FString> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString)
 	return res;
 }
 
-
+TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString)
+{
+	TArray<UTextPage*> res;
+	int nextline = 0;
+	int last = 0;
+	for (int i = 3; i < longString.Len(); ++i)
+	{
+		TCHAR n = longString[i];
+		if (longString[i-2] == '\n' && longString[i-1] == '\r' && longString[i] == '\n')
+		{
+			nextline++;
+		}
+		if (nextline > 0 || i == longString.Len() - 1)
+		{
+			UTextPage* tmp = NewObject<UTextPage>();
+			FString text;
+			text = longString.Mid(last + 1, i - last-1);
+			tmp->ShowText = text;
+			res.Push(tmp);
+			last = i;
+			nextline = 0;
+		}
+	}	
+	return res;
+}
