@@ -3,8 +3,8 @@
 #pragma once
 #include "Engine/EngineTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "TextPage.h"
 #include "AVGBlueprintFunctionLibrary.generated.h"
-
 
 /**
  * 
@@ -19,5 +19,8 @@ public:
 	static	TArray<FVector2D> Make2DposArray(int32 size1, int32 size2);
 
 	UFUNCTION(BlueprintCallable, Category = "Tools")
-	static	TArray<FString> SplitCheaper(FString longString);
+	static	TArray<FString> SplitCheaper3line(FString longString);
+
+	UFUNCTION(BlueprintCallable, Category = "Tools")
+	static	TArray<UTextPage*> SplitCheaper(FString longString);
 };
