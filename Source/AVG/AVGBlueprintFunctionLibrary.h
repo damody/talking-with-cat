@@ -23,4 +23,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Tools")
 	static	TArray<UTextPage*> SplitCheaper(FString longString);
+
+
 };
