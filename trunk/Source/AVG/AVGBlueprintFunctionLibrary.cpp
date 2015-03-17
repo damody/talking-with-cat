@@ -5,6 +5,7 @@
 // for GEngine
 #include "Engine.h"
 
+
 TArray<FVector2D> UAVGBlueprintFunctionLibrary::Make2DposArray(int32 s1, int32 s2)
 {
 	TArray<FVector2D> res;
@@ -82,11 +83,21 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
 				}
 				else if (commend.Left(4) == "wait")
 				{
-
+					tmp->HasCommend = true;
+					tmp->Effect->EffectId = ETextEffectEnum::Wait;
+					char* str = TCHAR_TO_ANSI(*commend);
+					float time = 0;
+					sscanf(str, "wait(%f)", &time);
+					tmp->Effect->Parmeter1 = time;
 				}
 				else if (commend.Left(12) == "screen flash")
 				{
-
+					tmp->HasCommend = true;
+					tmp->Effect->EffectId = ETextEffectEnum::Flash;
+					char* str = TCHAR_TO_ANSI(*commend);
+					float time = 0;
+					sscanf(str, "screen flash(%f)", &time);
+					tmp->Effect->Parmeter1 = time;
 				}
 				else if (commend.Left(3) == "bgm")
 				{
@@ -96,6 +107,7 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
 			else if (text.FindChar(L'¡G', findchr))
 			{
 				tmp->ShowName = text.Left(findchr);
+				tmp->ShowText = text.Mid(findchr + 1);
 			}
 			// µù¸Ñ
 			if (text[0] != L'#')
