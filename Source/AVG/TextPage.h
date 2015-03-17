@@ -18,6 +18,15 @@ class AVG_API UTextPage : public UObject
 {
 	GENERATED_BODY()
 public:
+	
+	UFUNCTION(BlueprintCallable, Category = "Page")
+	void ResetFadeIn();
+
+	UFUNCTION(BlueprintCallable, Category = "Page")
+	FString GetFadeInText(bool& showAll);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
+	int32 FadeInTextPos;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
 	FString ShowName;
