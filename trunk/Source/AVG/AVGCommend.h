@@ -31,4 +31,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
 	float Parmeter1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
+	FString Parmeter2;
 };
