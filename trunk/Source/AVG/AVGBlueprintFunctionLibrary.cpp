@@ -65,7 +65,8 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
             text = longString.Mid(last + 1, i - last - 1);
             tmp->ShowText = text;
             int32 findchr = 0;
-            if(text[0] == L'¡m')
+			// ¡m
+			if (text[0] == L'\u300A')
             {
                 tmp->Effect = NewObject<UAVGCommend>();
                 FString commend = text.Mid(1, text.Len() - 5);
@@ -116,13 +117,14 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
 					tmp->Effect->Parmeter2 = midtext;
                 }
             }
-            else if(text.FindChar(L'¡G', findchr))
+			// ¡G
+			else if (text.FindChar(L'\uFF1A', findchr))
             {
                 tmp->ShowName = text.Left(findchr);
                 tmp->ShowText = text.Mid(findchr + 1);
             }
             // µù¸Ñ
-            if(text[0] != L'#')
+            if(text[0] != '#')
             {
                 res.Push(tmp);
             }
