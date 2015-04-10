@@ -134,3 +134,34 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
     }
     return res;
 }
+
+bool UAVGBlueprintFunctionLibrary::MusicStringCmp(FString s1, FString s2)
+{
+	int32 l1 = s1.Len();
+	int32 l2 = s2.Len();
+	if (l1 > l2)
+	{
+		l1 = l2;
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, "l1: " + FString::FromInt(l1));
+	bool cmp = true;
+	for (int32 i = 0; i < l1; ++i)
+	{
+		if (s1[i] != s2[i])
+		{
+			cmp = false;
+			break;
+		}
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, "s1: " + s1);
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, "s2: " + s2);
+	if (cmp)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, "True");
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, "False");
+	}
+	return cmp;
+}

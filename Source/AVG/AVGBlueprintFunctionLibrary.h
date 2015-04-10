@@ -24,5 +24,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Tools")
 	static	TArray<UTextPage*> SplitCheaper(FString longString);
 
-
+	UFUNCTION(BlueprintCallable, Category = "Tools")
+	static	bool MusicStringCmp(FString s1, FString s2);
 };
