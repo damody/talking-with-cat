@@ -20,24 +20,20 @@ enum class ERoleFaceEnum : uint8
 };
 
 
-UCLASS()
+UCLASS(BlueprintType)
 class AVG_API ARoleActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
-	ARoleActor();
-
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	
-	// Called every frame
-	virtual void Tick( float DeltaSeconds ) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Role")
 	FString Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Role")
-	TArray<UPaperSprite*> Sprite;
+	TArray<UPaperSprite*> FaceSprites;
+
+	UFUNCTION(BlueprintCallable, Category = "Role")
+	UPaperSprite* GetNormalSprite();
 };
+
