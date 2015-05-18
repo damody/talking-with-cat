@@ -1,0 +1,32 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{832DAE83-49F7-69A6-DD89-26BA7E0A9054}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "Matthiola",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "CustomMeshComponent",
+			"Enabled": false
+		},
+		{
+			"Name": "VictoryPlugin",
+			"Enabled": true
+		},
+		{
+			"Name": "BlueprintStats",
+			"Enabled": true
+		}
+	],
+	"TargetPlatforms": [
+		"Android",
+		"HTML5",
+		"WindowsNoEditor"
+	]
+}
