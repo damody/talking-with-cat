@@ -6,7 +6,7 @@
 #include "RoleInfoThumbnailRenderer.generated.h"
 
 
-UCLASS()
+UCLASS(MinimalAPI)
 class URoleInfoThumbnailRenderer : public UDefaultSizedThumbnailRenderer
 {
 	GENERATED_UCLASS_BODY()
