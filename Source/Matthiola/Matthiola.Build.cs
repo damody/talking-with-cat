@@ -7,16 +7,17 @@ public class Matthiola : ModuleRules
 	public Matthiola(TargetInfo Target)
 	{
         PublicDependencyModuleNames.AddRange(new string[] { 
-            "Core", 
-            "CoreUObject", 
-            "Engine", 
-            "InputCore", 
-            "Paper2D", 
-            "UnrealEd"
-			});
-        
-		PrivateDependencyModuleNames.AddRange(new string[] { });
-
+        "Core", 
+        "CoreUObject", 
+        "Engine", 
+        "InputCore", 
+        "Paper2D",
+        "AVG"
+		});
+        if (Target.Platform == UnrealTargetPlatform.Win32 || Target.Platform == UnrealTargetPlatform.Win64)
+        {
+            PublicDependencyModuleNames.AddRange(new string[] {"AVGEditor"});
+        }
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		

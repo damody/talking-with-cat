@@ -27,5 +27,5 @@ public:
 	static bool SaveObjectToAsset(UObject* data, FString outpath);
 	
 	UFUNCTION(BlueprintCallable, meta = (FriendlyName = "LoadCharacters"), Category = "AssetHandler")
-	bool LoadCharacters_Array(TSubclassOf<class APaperCharacter> parentClass, FString outpath);
+	TArray<APaperCharacter*> LoadCharacters_Array(TSubclassOf<class APaperCharacter> parentClass, FString outpath);
 };

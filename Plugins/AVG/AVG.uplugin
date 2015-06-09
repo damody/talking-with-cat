@@ -1,0 +1,28 @@
+{
+	"FileVersion" : 3,
+	
+	"FriendlyName" : "AVG",
+	"Version" : 1,
+	"VersionName" : "1.0",
+	"CreatedBy" : "Damody, Inc.",
+	"CreatedByURL" : "damody@ntust-cgal.com",
+	"EngineVersion" : "4.2.0",
+	"Description" : "Help to make Text Adventure Game",
+	"Category" : "AVG",
+	"EnabledByDefault" : true,
+
+	"Modules" :
+	[
+		{
+			"Name" : "AVG",
+			"Type" : "Runtime",
+			"LoadingPhase" : "PreDefault"
+		},
+		{
+			"Name" : "AVGEditor",
+			"Type" : "Editor"
+		}
+	],
+
+	"CanContainContent" : true
+}
