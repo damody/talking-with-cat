@@ -4,7 +4,6 @@
 #include "AssetHandlerActor.h"
 #include "AssetRegistryModule.h"
 #include "Misc/OutputDevice.h"
-#include "FileHelpers.h"
 #include "FightCharacterData.h"
 #include "PaperCharacter.h"
 
@@ -56,8 +55,9 @@ bool AAssetHandlerActor::SaveObjectToAsset(UObject* data, FString outpath)
 }
 
 
-bool AAssetHandlerActor::LoadCharacters_Array(TSubclassOf<class APaperCharacter> parentClass, FString path)
+TArray<APaperCharacter*> AAssetHandlerActor::LoadCharacters_Array(TSubclassOf<class APaperCharacter> parentClass, FString path)
 {
+	TArray<APaperCharacter*> res;
     UWorld* const World = GetWorld();
     if(World)
     {
@@ -66,13 +66,13 @@ bool AAssetHandlerActor::LoadCharacters_Array(TSubclassOf<class APaperCharacter>
         for(int32 i = 0; i < datas.Num(); ++i)
         {
             UFightCharacterData* ufcdata = Cast<UFightCharacterData>(datas[i]);
-            APaperCharacter* newactor = World->SpawnActor<APaperCharacter>(parentClass);
-            if(newactor != nullptr)
+			if (ufcdata != nullptr)
             {
-                newactor->SetActorLocation(ufcdata->pos);
+				APaperCharacter* newActor = World->SpawnActor<APaperCharacter>(parentClass);
+                newActor->SetActorLocation(ufcdata->pos);
+				res.Add(newActor);
             }
         }
-        return true;
     }
-    return false;
+	return res;
 }
