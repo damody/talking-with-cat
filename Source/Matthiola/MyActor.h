@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "EnumAsByte.h"
 #include "MyActor.generated.h"
 
 UENUM(BlueprintType)
@@ -31,8 +32,8 @@ public:
 	TArray<int32> Structs;
 
 	UFUNCTION(BlueprintCallable, Category = "Stuff", Meta = (ExpandEnumAsExecs = "Branches"))
-	void DoSomeBranch(int32 SomeInput, TEnumAsByte<EMyEnum>& Branches);
+	void DoSomeBranch(int32 SomeInput, EMyEnum& Branches);
 	
 	UFUNCTION(BlueprintCallable, Category = "Stuff", Meta = (ExpandEnumAsExecs = "Branches"))
-	int32 DoSomeBranch2(int32 SomeInput, TEnumAsByte<EMyEnum>& Branches);
+	int32 DoSomeBranch2(int32 SomeInput, EMyEnum& Branches);
 };

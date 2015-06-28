@@ -26,7 +26,7 @@ void AMyActor::Tick( float DeltaTime )
 
 }
 
-int32 AMyActor::DoSomeBranch2(int32 SomeInput, TEnumAsByte<EMyEnum>& Branches)
+int32 AMyActor::DoSomeBranch2(int32 SomeInput, EMyEnum& Branches)
 {
 	if (SomeInput == 1)
 	{
@@ -39,7 +39,7 @@ int32 AMyActor::DoSomeBranch2(int32 SomeInput, TEnumAsByte<EMyEnum>& Branches)
 	return SomeInput;
 }
 
-void AMyActor::DoSomeBranch(int32 SomeInput, TEnumAsByte<EMyEnum>& Branches)
+void AMyActor::DoSomeBranch(int32 SomeInput, EMyEnum& Branches)
 {
 	if (SomeInput == 1)
 	{

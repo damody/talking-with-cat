@@ -2,13 +2,42 @@
 
 #include "AVGPrivatePCH.h"
 #include "FightCharacter.h"
+#include "PaperFlipbookComponent.h"
 
+FName AFightCharacter::SpriteComponentName(TEXT("Sprite0"));
 
-float AFightCharacter::WalkingDuration()
+AFightCharacter::AFightCharacter(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.DoNotCreateDefaultSubobject(ACharacter::MeshComponentName))
 {
-	if (PF_Walking != nullptr)
+	// Try to create the sprite component
+	Sprite = ObjectInitializer.CreateOptionalDefaultSubobject<UPaperFlipbookComponent>(this, APaperCharacter::SpriteComponentName);
+	if (Sprite)
 	{
-		return PF_Walking->GetTotalDuration();
+		Sprite->AlwaysLoadOnClient = true;
+		Sprite->AlwaysLoadOnServer = true;
+		Sprite->bOwnerNoSee = false;
+		Sprite->bAffectDynamicIndirectLighting = true;
+		Sprite->PrimaryComponentTick.TickGroup = TG_PrePhysics;
+		Sprite->AttachParent = GetCapsuleComponent();
+		static FName CollisionProfileName(TEXT("CharacterMesh"));
+		Sprite->SetCollisionProfileName(CollisionProfileName);
+		Sprite->bGenerateOverlapEvents = false;
 	}
-	return 0;
+}
+
+void AFightCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (!IsPendingKill())
+	{
+		if (Sprite)
+		{
+			// force animation tick after movement component updates
+			if (Sprite->PrimaryComponentTick.bCanEverTick && GetCharacterMovement())
+			{
+				Sprite->PrimaryComponentTick.AddPrerequisite(GetCharacterMovement(), GetCharacterMovement()->PrimaryComponentTick);
+			}
+		}
+	}
 }
