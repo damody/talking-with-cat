@@ -18,6 +18,14 @@
 		{
 			"Name": "AVG",
 			"Enabled": true
+		},
+		{
+			"Name": "ScriptPlugin",
+			"Enabled": true
+		},
+		{
+			"Name": "ScriptGeneratorPlugin",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
