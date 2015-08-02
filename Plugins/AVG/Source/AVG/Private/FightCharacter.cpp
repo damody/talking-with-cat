@@ -3,6 +3,8 @@
 #include "AVGPrivatePCH.h"
 #include "FightCharacter.h"
 #include "PaperFlipbookComponent.h"
+// for GEngine
+#include "Engine.h"
 
 FName AFightCharacter::SpriteComponentName(TEXT("Sprite0"));
 
@@ -40,4 +42,39 @@ void AFightCharacter::PostInitializeComponents()
 			}
 		}
 	}
+}
+
+void AFightCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	bool needattack = false;
+	// for loop all AFightCharacter
+	for (TActorIterator<AFightCharacter> It(GetWorld()); It; ++It)
+	{
+		// if different Faction with our
+		if (It->Faction != this->Faction)
+		{
+			// attack
+			if (FVector::Dist(It->GetActorLocation(), this->GetActorLocation()) < AttackRadius)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, this->GetName() + TEXT(" attack"));
+				Sprite->SetFlipbook(PF_Attacking1);
+				this->GetController()->StopMovement();
+				needattack = true;
+				break;
+			}
+		}
+	}
+	if (!needattack)
+	{
+		//UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
+	}
+	// if no attack go to Destination
+	
+}
+
+void AFightCharacter::SetDestination(FVector dst)
+{
+	Destination = dst;
 }

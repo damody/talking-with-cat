@@ -21,9 +21,18 @@ class AVG_API AFightCharacter : public ACharacter
 public:
 	virtual void PostInitializeComponents() override;
 
+	// Called every frame
+	virtual void Tick(float DeltaSeconds) override;
+
+	UFUNCTION(BlueprintCallable, Category = "FightRole")
+	void SetDestination(FVector dst);
+
 	/** Returns Sprite subobject **/
 	FORCEINLINE class UPaperFlipbookComponent* GetSprite() const { return Sprite; }
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+	FVector Destination;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	int32 Faction;
 
