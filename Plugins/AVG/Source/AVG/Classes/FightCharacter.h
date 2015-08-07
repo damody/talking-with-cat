@@ -10,6 +10,7 @@
 UENUM(BlueprintType)
 enum class EFightStausEnum : uint8
 {
+	Creating,
 	Walking,
 	Attacking,
 	AttackEnding
@@ -50,10 +51,13 @@ public:
 	/** Returns Sprite subobject **/
 	FORCEINLINE class UPaperFlipbookComponent* GetSprite() const { return Sprite; }
 public:
-	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FightRole")
+	float StateDeltaSeconds;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FightRole")
 	TArray<AActor*> BodyCollision;
 	
-	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FightRole")
 	TArray<AActor*> AttackCollision;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
@@ -109,6 +113,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	float	AttackDelay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+	float	AttackEndingDelay;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	int32	AttackRadius;
