@@ -7,6 +7,14 @@
 #include "PaperFlipbookComponent.h"
 #include "FightCharacter.generated.h"
 
+UENUM(BlueprintType)
+enum class EFightStausEnum : uint8
+{
+	Walking,
+	Attacking,
+	AttackEnding
+};
+
 /**
  * 
  */
@@ -21,6 +29,18 @@ class AVG_API AFightCharacter : public ACharacter
 public:
 	virtual void PostInitializeComponents() override;
 
+	UFUNCTION()
+	void OnBeginAttackOverlap(AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+	UFUNCTION()
+	void OnEndAttackOverlap(AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION()
+	void OnBeginBodyOverlap(AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+	UFUNCTION()
+	void OnEndBodyOverlap(AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
@@ -30,11 +50,26 @@ public:
 	/** Returns Sprite subobject **/
 	FORCEINLINE class UPaperFlipbookComponent* GetSprite() const { return Sprite; }
 public:
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
+	TArray<AActor*> BodyCollision;
+	
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
+	TArray<AActor*> AttackCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+	EFightStausEnum FightStaus;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	FVector Destination;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	int32 Faction;
+
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
+	UBoxComponent* AttackBox;
+
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
+	UBoxComponent* BodyBox;
 
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
 	UPaperFlipbookComponent* Sprite;

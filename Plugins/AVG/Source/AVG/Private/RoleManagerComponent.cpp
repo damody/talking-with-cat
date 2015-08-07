@@ -38,7 +38,7 @@ void URoleManagerComponent::UpdateBodySetup()
 {
 	if(ShapeBodySetup == NULL || ShapeBodySetup->IsPendingKill())
 	{
-		ShapeBodySetup = ConstructObject<UBodySetup>(UBodySetup::StaticClass(), this);
+		ShapeBodySetup = NewObject<UBodySetup>(this);
 		ShapeBodySetup->CollisionTraceFlag = CTF_UseSimpleAsComplex;
 		ShapeBodySetup->AggGeom.BoxElems.Add(FKBoxElem());
 	}

@@ -13,7 +13,7 @@ bool UFightCharacterData::SaveCharacter(APaperCharacter* data, FString outpath)
     FString PackageName = outpath;
     PackageName += name;
     UPackage* Package = CreatePackage(NULL, *PackageName);
-	UFightCharacterData* NewAsset = NewNamedObject<UFightCharacterData>(Package, FName("FightCharacterData"), RF_Public);
+	UFightCharacterData* NewAsset = NewObject<UFightCharacterData>(Package, FName("FightCharacterData"), RF_Public);
 	NewAsset->pos = data->GetActorLocation();
 	name = TEXT("FCD_") + name;
 	NewAsset->Rename(*name);
@@ -36,7 +36,7 @@ bool UFightCharacterData::SaveCharacters_Array(TArray<APaperCharacter*> chars, F
         FString PackageName = outpath;
         PackageName += name;
 		UPackage* Package = CreatePackage(NULL, *PackageName);
-		UFightCharacterData* NewAsset = NewNamedObject<UFightCharacterData>(Package, FName("FightCharacterData"), RF_Public);
+		UFightCharacterData* NewAsset = NewObject<UFightCharacterData>(Package, FName("FightCharacterData"), RF_Public);
 		NewAsset->pos = data->GetActorLocation();
 		name = TEXT("FCD_") + name;
 		NewAsset->Rename(*name);

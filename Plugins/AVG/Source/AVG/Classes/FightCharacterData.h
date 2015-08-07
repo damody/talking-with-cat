@@ -17,10 +17,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AssetData")
 	FVector pos;
 
-	UFUNCTION(BlueprintCallable, meta = (FriendlyName = "SaveCharacter (PaperCharacter)"), Category = "AssetData")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SaveCharacter (PaperCharacter)"), Category = "AssetData")
 	static bool SaveCharacter(APaperCharacter* chars, FString outpath);
 
-	UFUNCTION(BlueprintCallable, meta = (FriendlyName = "SaveCharacters (PaperCharacter array)"), Category = "AssetData")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SaveCharacters (PaperCharacter array)"), Category = "AssetData")
 	static bool SaveCharacters_Array(TArray<APaperCharacter*> chars, FString outpath);
 		
 };
