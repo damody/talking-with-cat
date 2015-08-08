@@ -120,7 +120,7 @@ void AFightCharacter::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
     if(HP <= 0)
     {
-        this->Destroy();
+		FightStaus = EFightStausEnum::Deathing;
         return;
     }
     switch(FightStaus)

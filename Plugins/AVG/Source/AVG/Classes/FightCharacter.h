@@ -13,7 +13,8 @@ enum class EFightStausEnum : uint8
 	Creating,
 	Walking,
 	Attacking,
-	AttackEnding
+	AttackEnding,
+	Deathing
 };
 
 /**
@@ -116,6 +117,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	float	AttackEndingDelay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+		float	DeathingDelay;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	int32	AttackRadius;
