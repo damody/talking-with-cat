@@ -14,7 +14,9 @@ enum class EFightStausEnum : uint8
 	Walking,
 	Attacking,
 	AttackEnding,
-	Deathing
+	Deathing,
+	ToBeKnocking,
+	BeKnocking
 };
 
 /**
@@ -86,16 +88,16 @@ public:
 	UPaperFlipbook* PF_Attacking1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
-	UPaperFlipbook* PF_Walking2;
+	UPaperFlipbook* PF_AttackEnding1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
-	UPaperFlipbook* PF_Attacking2;
+	UPaperFlipbook* PF_Deathing1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+	UPaperFlipbook* PF_Dazing1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
-	UPaperFlipbook* PF_Walking3;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
-	UPaperFlipbook* PF_Attacking3;
+	UPaperFlipbook* PF_BeKnocking1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	int32	RoleLevel;
@@ -119,7 +121,13 @@ public:
 	float	AttackEndingDelay;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
-		float	DeathingDelay;
+	float	DeathingDelay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+	float	DazingDelay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+	float	BeKnockingDelay;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	int32	AttackRadius;

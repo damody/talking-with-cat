@@ -69,8 +69,8 @@ void AFightCharacter::OnBeginAttackOverlap(class AActor* OtherActor, class UPrim
             if(OtherComp->GetName() == TEXT("BodyBox0"))
             {
                 AttackCollision.Add(OtherActor);
-                GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, this->GetName() + TEXT(" OnBeginAttackOverlap"));
-                GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, OtherActor->GetName() + " All: " + FString::FromInt(AttackCollision.Num()));
+//                 GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, this->GetName() + TEXT(" OnBeginAttackOverlap"));
+//                 GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, OtherActor->GetName() + " All: " + FString::FromInt(AttackCollision.Num()));
             }
         }
     }
@@ -84,8 +84,8 @@ void AFightCharacter::OnEndAttackOverlap(AActor* OtherActor, UPrimitiveComponent
         if(OtherComp->GetName() == TEXT("BodyBox0"))
         {
             AttackCollision.Remove(OtherActor);
-            GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, this->GetName() + TEXT(" OnEndAttackOverlap"));
-            GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, OtherActor->GetName() + " All: " + FString::FromInt(AttackCollision.Num()));
+//             GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, this->GetName() + TEXT(" OnEndAttackOverlap"));
+//             GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, OtherActor->GetName() + " All: " + FString::FromInt(AttackCollision.Num()));
         }
     }
 }
@@ -118,10 +118,10 @@ void AFightCharacter::OnEndBodyOverlap(AActor* OtherActor, UPrimitiveComponent* 
 void AFightCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
-    if(HP <= 0)
+    if(HP <= 0 && FightStaus != EFightStausEnum::Deathing)
     {
-		FightStaus = EFightStausEnum::Deathing;
-        return;
+        FightStaus = EFightStausEnum::Deathing;
+        Sprite->SetFlipbook(PF_Deathing1);
     }
     switch(FightStaus)
     {
@@ -135,7 +135,35 @@ void AFightCharacter::Tick(float DeltaSeconds)
         {
             UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
             FightStaus = EFightStausEnum::Walking;
+            Sprite->SetFlipbook(PF_Walking1);
             AttackCollision.Empty();
+            StateDeltaSeconds = 0;
+        }
+    }
+    break;
+    case EFightStausEnum::ToBeKnocking:
+    {
+        Sprite->SetFlipbook(PF_BeKnocking1);
+        StateDeltaSeconds = 0;
+        FightStaus = EFightStausEnum::BeKnocking;
+    }
+    break;
+    case EFightStausEnum::BeKnocking:
+    {
+        StateDeltaSeconds += DeltaSeconds;
+        if(StateDeltaSeconds > BeKnockingDelay)
+        {
+            if(AttackCollision.Num() > 0)
+            {
+                FightStaus = EFightStausEnum::Attacking;
+                Sprite->SetFlipbook(PF_Attacking1);
+            }
+            else
+            {
+                UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
+                FightStaus = EFightStausEnum::Walking;
+                Sprite->SetFlipbook(PF_Walking1);
+            }
             StateDeltaSeconds = 0;
         }
     }
@@ -144,8 +172,12 @@ void AFightCharacter::Tick(float DeltaSeconds)
     {
         StateDeltaSeconds += DeltaSeconds;
         bool needattack = false;
+        // sometime forget walking
+        if(StateDeltaSeconds > 1 && this->GetVelocity().IsNearlyZero(1))
+        {
+            UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
+        }
         // attack
-        //if(FVector::Dist(It->GetActorLocation(), this->GetActorLocation()) < AttackRadius)
         if(AttackCollision.Num() > 0)
         {
             //GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, this->GetName() + TEXT(" attack"));
@@ -169,10 +201,17 @@ void AFightCharacter::Tick(float DeltaSeconds)
                 if(tfc)
                 {
                     tfc->HP -= 10;
+                    // À»¯}
+                    //tfc->FightStaus = EFightStausEnum::ToBeKnocking;
+                    // À»­¸
+                    FVector OurV = Destination - this->GetActorLocation();
+                    OurV.Normalize();
+                    tfc->GetCharacterMovement()->Velocity = OurV * 1000;
                 }
             }
-			StateDeltaSeconds = 0;
-			FightStaus = EFightStausEnum::AttackEnding;
+            StateDeltaSeconds = 0;
+            FightStaus = EFightStausEnum::AttackEnding;
+            Sprite->SetFlipbook(PF_AttackEnding1);
         }
     }
     break;
@@ -181,16 +220,27 @@ void AFightCharacter::Tick(float DeltaSeconds)
         StateDeltaSeconds += DeltaSeconds;
         if(StateDeltaSeconds > AttackEndingDelay)
         {
-			if (AttackCollision.Num() > 0)
-			{
-				FightStaus = EFightStausEnum::Attacking;
-			}
-			else
-			{
-				UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
-				FightStaus = EFightStausEnum::Walking;
-			}
-			StateDeltaSeconds = 0;
+            if(AttackCollision.Num() > 0)
+            {
+                FightStaus = EFightStausEnum::Attacking;
+                Sprite->SetFlipbook(PF_Attacking1);
+            }
+            else
+            {
+                UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
+                FightStaus = EFightStausEnum::Walking;
+                Sprite->SetFlipbook(PF_Walking1);
+            }
+            StateDeltaSeconds = 0;
+        }
+    }
+    break;
+    case EFightStausEnum::Deathing:
+    {
+        StateDeltaSeconds += DeltaSeconds;
+        if(StateDeltaSeconds > DeathingDelay)
+        {
+            this->Destroy();
         }
     }
     break;
