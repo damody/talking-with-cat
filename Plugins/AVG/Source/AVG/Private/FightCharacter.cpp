@@ -202,7 +202,7 @@ void AFightCharacter::Tick(float DeltaSeconds)
                 {
                     tfc->HP -= 10;
                     // À»¯}
-                    //tfc->FightStaus = EFightStausEnum::ToBeKnocking;
+                    tfc->FightStaus = EFightStausEnum::ToBeKnocking;
                     // À»­¸
                     FVector OurV = Destination - this->GetActorLocation();
                     OurV.Normalize();
