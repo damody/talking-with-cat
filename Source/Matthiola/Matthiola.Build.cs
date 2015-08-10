@@ -14,7 +14,7 @@ public class Matthiola : ModuleRules
         "Paper2D",
         "AVG"
 		});
-        if (Target.Platform == UnrealTargetPlatform.Win32 || Target.Platform == UnrealTargetPlatform.Win64)
+        if (UEBuildConfiguration.bBuildEditor)
         {
             PublicDependencyModuleNames.AddRange(new string[] {"AVGEditor"});
         }

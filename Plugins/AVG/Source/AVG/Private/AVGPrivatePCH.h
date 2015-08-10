@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "FightCharacter.h"
 #include "FightCharacterData.h"
+#include "BulletCharacter.h"
 #include "RoleInfo.h"
 #include "RoleManager.h"
 #include "RoleManagerActor.h"

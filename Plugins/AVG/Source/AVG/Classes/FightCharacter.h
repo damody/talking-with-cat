@@ -11,6 +11,7 @@ UENUM(BlueprintType)
 enum class EFightStausEnum : uint8
 {
 	Creating,
+	Nothing,
 	Walking,
 	Attacking,
 	AttackEnding,
@@ -51,6 +52,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "FightRole")
 	void SetDestination(FVector dst);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "FightRole")
+	virtual void WalkingEvent(AFightCharacter* Actor);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "FightRole")
+	virtual void AttackingEvent(AFightCharacter* Actor);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "FightRole")
+	virtual void AttackEndingEvent(AFightCharacter* Actor);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "FightRole")
+	virtual void DeathingEvent(AFightCharacter* Actor);
+
 	/** Returns Sprite subobject **/
 	FORCEINLINE class UPaperFlipbookComponent* GetSprite() const { return Sprite; }
 public:
@@ -65,6 +78,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	EFightStausEnum FightStaus;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+	EFightStausEnum AssignFightStaus;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	FVector Destination;

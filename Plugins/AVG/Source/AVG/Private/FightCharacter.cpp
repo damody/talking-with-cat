@@ -40,6 +40,7 @@ AFightCharacter::AFightCharacter(const FObjectInitializer& ObjectInitializer)
         BodyBox->OnComponentEndOverlap.AddDynamic(this, &AFightCharacter::OnEndBodyOverlap);
     }
     FightStaus = EFightStausEnum::Creating;
+	AssignFightStaus = EFightStausEnum::Nothing;
 }
 
 void AFightCharacter::PostInitializeComponents()
@@ -122,7 +123,15 @@ void AFightCharacter::Tick(float DeltaSeconds)
     {
         FightStaus = EFightStausEnum::Deathing;
         Sprite->SetFlipbook(PF_Deathing1);
+		DeathingEvent(this);
     }
+	if (AssignFightStaus != EFightStausEnum::Nothing 
+		&& FightStaus != EFightStausEnum::Attacking
+		&& FightStaus != EFightStausEnum::Deathing)
+	{
+		FightStaus = AssignFightStaus;
+		AssignFightStaus = EFightStausEnum::Nothing;
+	}
     switch(FightStaus)
     {
     case EFightStausEnum::Creating:
@@ -138,6 +147,7 @@ void AFightCharacter::Tick(float DeltaSeconds)
             Sprite->SetFlipbook(PF_Walking1);
             AttackCollision.Empty();
             StateDeltaSeconds = 0;
+			WalkingEvent(this);
         }
     }
     break;
@@ -157,12 +167,14 @@ void AFightCharacter::Tick(float DeltaSeconds)
             {
                 FightStaus = EFightStausEnum::Attacking;
                 Sprite->SetFlipbook(PF_Attacking1);
+				AttackingEvent(this);
             }
             else
             {
                 UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
                 FightStaus = EFightStausEnum::Walking;
                 Sprite->SetFlipbook(PF_Walking1);
+				WalkingEvent(this);
             }
             StateDeltaSeconds = 0;
         }
@@ -171,23 +183,21 @@ void AFightCharacter::Tick(float DeltaSeconds)
     case EFightStausEnum::Walking:
     {
         StateDeltaSeconds += DeltaSeconds;
-        bool needattack = false;
         // sometime forget walking
         if(StateDeltaSeconds > 1 && this->GetVelocity().IsNearlyZero(1))
         {
             UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
         }
-        // attack
-        if(AttackCollision.Num() > 0)
-        {
-            //GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, this->GetName() + TEXT(" attack"));
-            Sprite->SetFlipbook(PF_Attacking1);
-            this->GetController()->StopMovement();
-            FightStaus = EFightStausEnum::Attacking;
-            StateDeltaSeconds = 0;
-            needattack = true;
-            break;
-        }
+		// attack
+		if (AttackCollision.Num() > 0)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, this->GetName() + TEXT(" attack"));
+			Sprite->SetFlipbook(PF_Attacking1);
+			this->GetController()->StopMovement();
+			FightStaus = EFightStausEnum::Attacking;
+			StateDeltaSeconds = 0;
+			break;
+		}
     }
     break;
     case EFightStausEnum::Attacking:
@@ -200,18 +210,19 @@ void AFightCharacter::Tick(float DeltaSeconds)
                 AFightCharacter* tfc = dynamic_cast<AFightCharacter*>(AttackCollision[i]);
                 if(tfc)
                 {
-                    tfc->HP -= 10;
+                    //tfc->HP -= 10;
                     // À»¯}
-                    tfc->FightStaus = EFightStausEnum::ToBeKnocking;
+					//tfc->AssignFightStaus = EFightStausEnum::ToBeKnocking;
                     // À»­¸
                     FVector OurV = Destination - this->GetActorLocation();
                     OurV.Normalize();
-                    tfc->GetCharacterMovement()->Velocity = OurV * 1000;
+                    //tfc->GetCharacterMovement()->Velocity = OurV * 1000;
                 }
             }
             StateDeltaSeconds = 0;
             FightStaus = EFightStausEnum::AttackEnding;
             Sprite->SetFlipbook(PF_AttackEnding1);
+			AttackEndingEvent(this);
         }
     }
     break;
@@ -224,12 +235,14 @@ void AFightCharacter::Tick(float DeltaSeconds)
             {
                 FightStaus = EFightStausEnum::Attacking;
                 Sprite->SetFlipbook(PF_Attacking1);
+				AttackingEvent(this);
             }
             else
             {
                 UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
                 FightStaus = EFightStausEnum::Walking;
                 Sprite->SetFlipbook(PF_Walking1);
+				WalkingEvent(this);
             }
             StateDeltaSeconds = 0;
         }
@@ -245,8 +258,6 @@ void AFightCharacter::Tick(float DeltaSeconds)
     }
     break;
     }
-
-    // if no attack go to Destination
 
 }
 
