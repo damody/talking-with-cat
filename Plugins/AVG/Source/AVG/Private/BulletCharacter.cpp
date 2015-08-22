@@ -119,7 +119,8 @@ void ABulletCharacter::OnEndBodyOverlap(AActor* OtherActor, UPrimitiveComponent*
 void ABulletCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
-    if(HP <= 0 && FightStaus != EBulletStausEnum::Deathing)
+    if((HP <= 0 && FightStaus != EBulletStausEnum::Deathing)
+		|| (FightStaus != EBulletStausEnum::Creating && FVector::Dist(StartPosition, GetActorLocation()) > MaxDistance))
     {
         FightStaus = EBulletStausEnum::Deathing;
         Sprite->SetFlipbook(PF_Deathing1);
@@ -140,6 +141,7 @@ void ABulletCharacter::Tick(float DeltaSeconds)
         }
         if(StateDeltaSeconds > 0.2)
         {
+			StartPosition = this->GetActorLocation();
             UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
             FightStaus = EBulletStausEnum::Flying1;
             Sprite->SetFlipbook(PF_Flying1);
@@ -202,14 +204,7 @@ void ABulletCharacter::Tick(float DeltaSeconds)
 			this->GetController()->StopMovement();
 			FightStaus = EBulletStausEnum::Deathing;
 			StateDeltaSeconds = 0;
-		}
-    }
-    break;
-    case EBulletStausEnum::Deathing:
-    {
-        StateDeltaSeconds += DeltaSeconds;
-        if(StateDeltaSeconds > DeathingDelay)
-        {
+
 			for (int32 i = 0; i < AttackCollision.Num(); ++i)
 			{
 				AFightCharacter* tfc = dynamic_cast<AFightCharacter*>(AttackCollision[i]);
@@ -221,7 +216,7 @@ void ABulletCharacter::Tick(float DeltaSeconds)
 					// À»­¸
 					FVector OurV;
 					if (Faction == 0)
-					{ 
+					{
 						OurV = FVector(-1, 0, 0);
 					}
 					else
@@ -231,6 +226,14 @@ void ABulletCharacter::Tick(float DeltaSeconds)
 					tfc->GetCharacterMovement()->Velocity = OurV * ImpulseVelocity;
 				}
 			}
+		}
+    }
+    break;
+    case EBulletStausEnum::Deathing:
+    {
+        StateDeltaSeconds += DeltaSeconds;
+        if(StateDeltaSeconds > DeathingDelay)
+        {
             this->Destroy();
         }
     }

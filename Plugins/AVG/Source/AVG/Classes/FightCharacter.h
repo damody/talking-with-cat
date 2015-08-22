@@ -46,9 +46,13 @@ public:
 	UFUNCTION()
 	void OnEndBodyOverlap(AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
+	UFUNCTION(BlueprintCallable, Category = "FightRole")
+	void SetFaceBack();
+	
 	UFUNCTION(BlueprintCallable, Category = "FightRole")
 	void SetDestination(FVector dst);
 
@@ -144,6 +148,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	float	BeKnockingDelay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+	float	KnockingProbability;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+	float	KnockingVelocity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	int32	AttackRadius;

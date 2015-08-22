@@ -20,4 +20,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Role")
 	URoleInfo* GetRoleByName(FString name);
+
+	
 };

@@ -36,4 +36,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Stuff", Meta = (ExpandEnumAsExecs = "Branches"))
 	int32 DoSomeBranch2(int32 SomeInput, EMyEnum& Branches);
+
+	UFUNCTION(BlueprintCallable, Category = "Role")
+	void TestCallFunctionByName(FString str);
 };

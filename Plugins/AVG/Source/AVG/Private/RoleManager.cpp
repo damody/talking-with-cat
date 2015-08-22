@@ -15,4 +15,3 @@ URoleInfo* URoleManager::GetRoleByName(FString name)
 	}
 	return nullptr;
 }
-

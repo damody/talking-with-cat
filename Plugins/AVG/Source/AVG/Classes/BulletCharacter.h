@@ -78,6 +78,9 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FightRole")
     float StateDeltaSeconds;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
+    float MaxDistance;
+
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FightRole")
     TArray<AActor*> BodyCollision;
 
@@ -89,6 +92,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
     EBulletStausEnum AssignFightStaus;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FightRole")
+    FVector StartPosition;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
     FVector Destination;

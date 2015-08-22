@@ -40,7 +40,7 @@ AFightCharacter::AFightCharacter(const FObjectInitializer& ObjectInitializer)
         BodyBox->OnComponentEndOverlap.AddDynamic(this, &AFightCharacter::OnEndBodyOverlap);
     }
     FightStaus = EFightStausEnum::Creating;
-	AssignFightStaus = EFightStausEnum::Nothing;
+    AssignFightStaus = EFightStausEnum::Nothing;
 }
 
 void AFightCharacter::PostInitializeComponents()
@@ -123,15 +123,15 @@ void AFightCharacter::Tick(float DeltaSeconds)
     {
         FightStaus = EFightStausEnum::Deathing;
         Sprite->SetFlipbook(PF_Deathing1);
-		DeathingEvent(this);
+        DeathingEvent(this);
     }
-	if (AssignFightStaus != EFightStausEnum::Nothing 
-		&& FightStaus != EFightStausEnum::Attacking
-		&& FightStaus != EFightStausEnum::Deathing)
-	{
-		FightStaus = AssignFightStaus;
-		AssignFightStaus = EFightStausEnum::Nothing;
-	}
+    if(AssignFightStaus != EFightStausEnum::Nothing
+            && FightStaus != EFightStausEnum::Attacking
+            && FightStaus != EFightStausEnum::Deathing)
+    {
+        FightStaus = AssignFightStaus;
+        AssignFightStaus = EFightStausEnum::Nothing;
+    }
     switch(FightStaus)
     {
     case EFightStausEnum::Creating:
@@ -147,7 +147,7 @@ void AFightCharacter::Tick(float DeltaSeconds)
             Sprite->SetFlipbook(PF_Walking1);
             AttackCollision.Empty();
             StateDeltaSeconds = 0;
-			WalkingEvent(this);
+            WalkingEvent(this);
         }
     }
     break;
@@ -167,14 +167,14 @@ void AFightCharacter::Tick(float DeltaSeconds)
             {
                 FightStaus = EFightStausEnum::Attacking;
                 Sprite->SetFlipbook(PF_Attacking1);
-				AttackingEvent(this);
+                AttackingEvent(this);
             }
             else
             {
                 UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
                 FightStaus = EFightStausEnum::Walking;
                 Sprite->SetFlipbook(PF_Walking1);
-				WalkingEvent(this);
+                WalkingEvent(this);
             }
             StateDeltaSeconds = 0;
         }
@@ -188,16 +188,16 @@ void AFightCharacter::Tick(float DeltaSeconds)
         {
             UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
         }
-		// attack
-		if (AttackCollision.Num() > 0)
-		{
-			//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, this->GetName() + TEXT(" attack"));
-			Sprite->SetFlipbook(PF_Attacking1);
-			this->GetController()->StopMovement();
-			FightStaus = EFightStausEnum::Attacking;
-			StateDeltaSeconds = 0;
-			break;
-		}
+        // attack
+        if(AttackCollision.Num() > 0)
+        {
+            //GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, this->GetName() + TEXT(" attack"));
+            Sprite->SetFlipbook(PF_Attacking1);
+            this->GetController()->StopMovement();
+            FightStaus = EFightStausEnum::Attacking;
+            StateDeltaSeconds = 0;
+            break;
+        }
     }
     break;
     case EFightStausEnum::Attacking:
@@ -210,19 +210,22 @@ void AFightCharacter::Tick(float DeltaSeconds)
                 AFightCharacter* tfc = dynamic_cast<AFightCharacter*>(AttackCollision[i]);
                 if(tfc)
                 {
-                    //tfc->HP -= 10;
+                    tfc->HP -= Attack;
                     // À»¯}
-					//tfc->AssignFightStaus = EFightStausEnum::ToBeKnocking;
-                    // À»­¸
-                    FVector OurV = Destination - this->GetActorLocation();
-                    OurV.Normalize();
-                    //tfc->GetCharacterMovement()->Velocity = OurV * 1000;
+                    if(FMath::FRandRange(0, 1) < KnockingProbability) 
+					{
+                        tfc->AssignFightStaus = EFightStausEnum::ToBeKnocking;
+						// À»­¸
+						FVector OurV = Destination - this->GetActorLocation();
+						OurV.Normalize();
+						tfc->GetCharacterMovement()->Velocity = OurV * KnockingVelocity;
+                    }
                 }
             }
             StateDeltaSeconds = 0;
             FightStaus = EFightStausEnum::AttackEnding;
             Sprite->SetFlipbook(PF_AttackEnding1);
-			AttackEndingEvent(this);
+            AttackEndingEvent(this);
         }
     }
     break;
@@ -235,14 +238,14 @@ void AFightCharacter::Tick(float DeltaSeconds)
             {
                 FightStaus = EFightStausEnum::Attacking;
                 Sprite->SetFlipbook(PF_Attacking1);
-				AttackingEvent(this);
+                AttackingEvent(this);
             }
             else
             {
                 UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
                 FightStaus = EFightStausEnum::Walking;
                 Sprite->SetFlipbook(PF_Walking1);
-				WalkingEvent(this);
+                WalkingEvent(this);
             }
             StateDeltaSeconds = 0;
         }
@@ -259,6 +262,17 @@ void AFightCharacter::Tick(float DeltaSeconds)
     break;
     }
 
+}
+
+void AFightCharacter::SetFaceBack()
+{
+	Sprite->SetRelativeScale3D(FVector(-1, 1, 1));
+	FVector arl = AttackBox->RelativeLocation;
+	arl.X = -arl.X;
+	AttackBox->SetRelativeLocation(arl);
+	FVector brl = BodyBox->RelativeLocation;
+	brl.X = -brl.X;
+	BodyBox->SetRelativeLocation(brl);
 }
 
 void AFightCharacter::SetDestination(FVector dst)

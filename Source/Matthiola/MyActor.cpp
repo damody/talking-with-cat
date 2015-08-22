@@ -39,6 +39,12 @@ int32 AMyActor::DoSomeBranch2(int32 SomeInput, EMyEnum& Branches)
 	return SomeInput;
 }
 
+void AMyActor::TestCallFunctionByName(FString str)
+{
+	FOutputDeviceNull ar;
+	this->CallFunctionByNameWithArguments(*str, ar, NULL, true);
+}
+
 void AMyActor::DoSomeBranch(int32 SomeInput, EMyEnum& Branches)
 {
 	if (SomeInput == 1)
