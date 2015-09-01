@@ -36,16 +36,6 @@ void URoleManagerComponent::SetBoxExtent(FVector NewBoxExtent, bool bUpdateOverl
 
 void URoleManagerComponent::UpdateBodySetup()
 {
-	if(ShapeBodySetup == NULL || ShapeBodySetup->IsPendingKill())
-	{
-		ShapeBodySetup = NewObject<UBodySetup>(this);
-		ShapeBodySetup->CollisionTraceFlag = CTF_UseSimpleAsComplex;
-		ShapeBodySetup->AggGeom.BoxElems.Add(FKBoxElem());
-	}
-
-	check(ShapeBodySetup->AggGeom.BoxElems.Num() == 1);
-	FKBoxElem* se = ShapeBodySetup->AggGeom.BoxElems.GetData();
-
 	// @todo UE4 do we allow this now?
 	// check for malformed values
 	if( BoxExtent.X < KINDA_SMALL_NUMBER )
@@ -63,11 +53,6 @@ void URoleManagerComponent::UpdateBodySetup()
 		BoxExtent.Z = 1.0f;
 	}
 
-	// now set the PhysX data values
-	se->SetTransform( FTransform::Identity );
-	se->X = BoxExtent.X*2;
-	se->Y = BoxExtent.Y*2;
-	se->Z = BoxExtent.Z*2;
 }
 
 bool URoleManagerComponent::IsZeroExtent() const

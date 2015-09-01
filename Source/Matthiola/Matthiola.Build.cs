@@ -12,7 +12,8 @@ public class Matthiola : ModuleRules
         "Engine", 
         "InputCore", 
         "Paper2D",
-        "AVG"
+        "AVG",
+        "MoviePlayer"
 		});
         if (UEBuildConfiguration.bBuildEditor)
         {

@@ -4,7 +4,8 @@
 #include "AVGBlueprintFunctionLibrary.h"
 // for GEngine
 #include "Engine.h"
-
+#include "Runtime/MoviePlayer/Public/MoviePlayer.h"
+#include "ContentStreaming.h"
 
 TArray<FVector2D> UAVGBlueprintFunctionLibrary::Make2DposArray(int32 s1, int32 s2)
 {
@@ -164,4 +165,18 @@ bool UAVGBlueprintFunctionLibrary::MusicStringCmp(FString s1, FString s2)
 		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, "False");
 	}
 	return cmp;
+}
+
+bool UAVGBlueprintFunctionLibrary::MakeProgressLoadLevel()
+{
+	IStreamingManager::Get().StreamAllResources(10.0f);
+	FLoadingScreenAttributes LoadingScreen;
+	LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
+	LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget(); // <-- test screen that comes with UE
+	//LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
+	//LoadingScreen.bMoviesAreSkippable = true;
+	//LoadingScreen.MoviePaths.Add(TEXT("ggg"));
+	GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+	GetMoviePlayer()->PlayMovie();
+	return true;
 }

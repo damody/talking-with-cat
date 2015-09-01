@@ -5,7 +5,9 @@
 #include "PaperFlipbook.h"
 #include "PaperCharacter.h"
 #include "PaperFlipbookComponent.h"
+#include "PaperSpriteComponent.h"
 #include "FightCharacter.generated.h"
+
 
 UENUM(BlueprintType)
 enum class EFightStausEnum : uint8
@@ -100,6 +102,9 @@ public:
 
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
 	UPaperFlipbookComponent* Sprite;
+	
+// 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
+// 	UPaperSpriteComponent* Sprite2;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FightRole")
 	UPaperFlipbook* PF_Walking1;

@@ -26,4 +26,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Tools")
 	static	bool MusicStringCmp(FString s1, FString s2);
+
+	UFUNCTION(BlueprintCallable, Category = "Tools")
+	static	bool MakeProgressLoadLevel();
 };

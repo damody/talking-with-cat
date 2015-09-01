@@ -18,7 +18,7 @@ void URoleManagerActorFactory::PostSpawnActor(UObject* Asset, AActor* NewActor)
 {
 	if (URoleManager* Sprite = Cast<URoleManager>(Asset))
 	{
-		GEditor->SetActorLabelUnique(NewActor, Sprite->GetName());
+		FActorLabelUtilities::SetActorLabelUnique(NewActor, Sprite->GetName());
 
 		ARoleManagerActor* TypedActor = CastChecked<ARoleManagerActor>(NewActor);
 		URoleManagerComponent* RenderComponent = TypedActor->GetRenderComponent();

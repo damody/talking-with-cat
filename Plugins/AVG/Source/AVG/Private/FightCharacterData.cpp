@@ -21,7 +21,6 @@ bool UFightCharacterData::SaveCharacter(APaperCharacter* data, FString outpath)
     NewAsset->MarkPackageDirty();
     FString PackageFileName = FPackageName::LongPackageNameToFilename(PackageName, FPackageName::GetAssetPackageExtension());
     return UPackage::SavePackage(Package, data, RF_Public, *PackageFileName, GError, nullptr, false, true, SAVE_None);
-
 }
 
 

@@ -15,7 +15,7 @@ UFightCharacterDataFactory::UFightCharacterDataFactory(const FObjectInitializer&
 
 UObject* UFightCharacterDataFactory::FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn)
 {
-	UFightCharacterData* NewObjectAsset = ConstructObject<UFightCharacterData>(Class, InParent, Name, Flags | RF_Transactional);
+	UFightCharacterData* NewObjectAsset = NewObject<UFightCharacterData>(InParent, Class, Name, Flags | RF_Transactional);
 	return NewObjectAsset;
 }
 
