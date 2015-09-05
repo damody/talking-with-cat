@@ -12,10 +12,10 @@ AFightCharacter::AFightCharacter(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer.DoNotCreateDefaultSubobject(ACharacter::MeshComponentName))
 {
     // Try to create the sprite component
-	Sprite = ObjectInitializer.CreateOptionalDefaultSubobject<UPaperFlipbookComponent>(this, APaperCharacter::SpriteComponentName);
+    Sprite = ObjectInitializer.CreateOptionalDefaultSubobject<UPaperFlipbookComponent>(this, APaperCharacter::SpriteComponentName);
     AttackBox = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, TEXT("AttackBox0"));
     BodyBox = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, TEXT("BodyBox0"));
-	
+
     if(Sprite)
     {
         Sprite->AlwaysLoadOnClient = true;
@@ -23,42 +23,42 @@ AFightCharacter::AFightCharacter(const FObjectInitializer& ObjectInitializer)
         Sprite->bOwnerNoSee = false;
         Sprite->bAffectDynamicIndirectLighting = true;
         Sprite->PrimaryComponentTick.TickGroup = TG_PrePhysics;
-		Sprite->AttachParent = GetCapsuleComponent();
-		static FName CollisionProfileName(TEXT("Pawn"));
+        Sprite->AttachParent = GetCapsuleComponent();
+        static FName CollisionProfileName(TEXT("Pawn"));
         Sprite->SetCollisionProfileName(CollisionProfileName);
         Sprite->bGenerateOverlapEvents = false;
     }
     if(AttackBox)
     {
-		AttackBox->AttachParent = GetCapsuleComponent();
+        AttackBox->AttachParent = GetCapsuleComponent();
         AttackBox->SetBoxExtent(FVector(10, 10, 10));
         AttackBox->OnComponentBeginOverlap.AddDynamic(this, &AFightCharacter::OnBeginAttackOverlap);
         AttackBox->OnComponentEndOverlap.AddDynamic(this, &AFightCharacter::OnEndAttackOverlap);
-		AttackBox->SetCollisionObjectType(ECC_Pawn);
-		AttackBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-		AttackBox->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Ignore);
-		AttackBox->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
-		AttackBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-		AttackBox->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
-		AttackBox->SetCollisionResponseToChannel(ECC_Vehicle, ECR_Ignore);
-		AttackBox->SetCollisionResponseToChannel(ECC_Destructible, ECR_Ignore);
-		AttackBox->bGenerateOverlapEvents = true;
+        AttackBox->SetCollisionObjectType(ECC_Pawn);
+        AttackBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+        AttackBox->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Ignore);
+        AttackBox->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
+        AttackBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+        AttackBox->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
+        AttackBox->SetCollisionResponseToChannel(ECC_Vehicle, ECR_Ignore);
+        AttackBox->SetCollisionResponseToChannel(ECC_Destructible, ECR_Ignore);
+        AttackBox->bGenerateOverlapEvents = true;
     }
     if(BodyBox)
     {
-		BodyBox->AttachParent = GetCapsuleComponent();
+        BodyBox->AttachParent = GetCapsuleComponent();
         BodyBox->SetBoxExtent(FVector(10, 10, 10));
         BodyBox->OnComponentBeginOverlap.AddDynamic(this, &AFightCharacter::OnBeginBodyOverlap);
         BodyBox->OnComponentEndOverlap.AddDynamic(this, &AFightCharacter::OnEndBodyOverlap);
-		BodyBox->SetCollisionObjectType(ECC_Pawn);
-		BodyBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-		BodyBox->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Ignore);
-		BodyBox->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
-		BodyBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-		BodyBox->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
-		BodyBox->SetCollisionResponseToChannel(ECC_Vehicle, ECR_Ignore);
-		BodyBox->SetCollisionResponseToChannel(ECC_Destructible, ECR_Ignore);
-		BodyBox->bGenerateOverlapEvents = true;
+        BodyBox->SetCollisionObjectType(ECC_Pawn);
+        BodyBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+        BodyBox->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Ignore);
+        BodyBox->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
+        BodyBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+        BodyBox->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
+        BodyBox->SetCollisionResponseToChannel(ECC_Vehicle, ECR_Ignore);
+        BodyBox->SetCollisionResponseToChannel(ECC_Destructible, ECR_Ignore);
+        BodyBox->bGenerateOverlapEvents = true;
     }
     FightStaus = EFightStausEnum::Creating;
     AssignFightStaus = EFightStausEnum::Nothing;
@@ -88,12 +88,12 @@ void AFightCharacter::OnBeginAttackOverlap(class AActor* OtherActor, class UPrim
         AFightCharacter* tfc = dynamic_cast<AFightCharacter*>(OtherActor);
         if(tfc && tfc->Faction != this->Faction)
         {
-			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, OtherActor->GetName() + OtherComp->GetName() + " All: " + FString::FromInt(AttackCollision.Num()));
+            GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, OtherActor->GetName() + OtherComp->GetName() + " All: " + FString::FromInt(AttackCollision.Num()));
             if(OtherComp->GetName() == TEXT("BodyBox0"))
             {
                 AttackCollision.Add(OtherActor);
                 GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, this->GetName() + TEXT(" OnBeginAttackOverlap"));
-                
+
             }
         }
     }
@@ -104,12 +104,12 @@ void AFightCharacter::OnEndAttackOverlap(AActor* OtherActor, UPrimitiveComponent
     AFightCharacter* tfc = dynamic_cast<AFightCharacter*>(OtherActor);
     if(tfc && tfc->Faction != this->Faction)
     {
-		
+
         if(OtherComp->GetName() == TEXT("BodyBox0"))
         {
             AttackCollision.Remove(OtherActor);
             GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, this->GetName() + TEXT(" OnEndAttackOverlap"));
-			GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, OtherActor->GetName() + " All: " + FString::FromInt(AttackCollision.Num()));
+            GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan, OtherActor->GetName() + " All: " + FString::FromInt(AttackCollision.Num()));
         }
     }
 }
@@ -146,7 +146,10 @@ void AFightCharacter::Tick(float DeltaSeconds)
     {
         FightStaus = EFightStausEnum::Deathing;
         Sprite->SetFlipbook(PF_Deathing1);
-		this->GetController()->StopMovement();
+        if(this->GetController()) 
+		{
+            this->GetController()->StopMovement();
+        }
         DeathingEvent(this);
     }
     if(AssignFightStaus != EFightStausEnum::Nothing
@@ -164,7 +167,7 @@ void AFightCharacter::Tick(float DeltaSeconds)
         {
             StateDeltaSeconds += DeltaSeconds;
         }
-        if(StateDeltaSeconds > 0.5)
+        if(StateDeltaSeconds > 0.5 && this->GetController())
         {
             UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
             FightStaus = EFightStausEnum::Walking;
@@ -178,7 +181,10 @@ void AFightCharacter::Tick(float DeltaSeconds)
     case EFightStausEnum::ToBeKnocking:
     {
         Sprite->SetFlipbook(PF_BeKnocking1);
-		this->GetController()->StopMovement();
+        if(this->GetController())
+        {
+            this->GetController()->StopMovement();
+        }
         StateDeltaSeconds = 0;
         FightStaus = EFightStausEnum::BeKnocking;
     }
@@ -194,7 +200,7 @@ void AFightCharacter::Tick(float DeltaSeconds)
                 Sprite->SetFlipbook(PF_Attacking1);
                 AttackingEvent(this);
             }
-            else
+            else if(this->GetController())
             {
                 UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
                 FightStaus = EFightStausEnum::Walking;
@@ -208,18 +214,21 @@ void AFightCharacter::Tick(float DeltaSeconds)
     case EFightStausEnum::Walking:
     {
         StateDeltaSeconds += DeltaSeconds;
-		// attack
-		if (AttackCollision.Num() > 0)
-		{
-			//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, this->GetName() + TEXT(" attack"));
-			Sprite->SetFlipbook(PF_Attacking1);
-			this->GetController()->StopMovement();
-			FightStaus = EFightStausEnum::Attacking;
-			StateDeltaSeconds = 0;
-			break;
-		}
+        // attack
+        if(AttackCollision.Num() > 0)
+        {
+            //GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, this->GetName() + TEXT(" attack"));
+            Sprite->SetFlipbook(PF_Attacking1);
+            if(this->GetController())
+            {
+                this->GetController()->StopMovement();
+            }
+            FightStaus = EFightStausEnum::Attacking;
+            StateDeltaSeconds = 0;
+            break;
+        }
         // sometime forget walking
-        if(StateDeltaSeconds > 3 && this->GetVelocity().IsNearlyZero(1))
+        if(StateDeltaSeconds > 3 && this->GetVelocity().IsNearlyZero(1) && this->GetController())
         {
             UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
         }
@@ -237,20 +246,20 @@ void AFightCharacter::Tick(float DeltaSeconds)
                 {
                     tfc->HP -= Attack;
                     // À»¯}
-                    if(FMath::FRandRange(0, 1) < KnockingProbability) 
-					{
+                    if(FMath::FRandRange(0, 1) < KnockingProbability)
+                    {
                         tfc->AssignFightStaus = EFightStausEnum::ToBeKnocking;
-						// À»­¸
-						FVector OurV = Destination - this->GetActorLocation();
-						OurV.Normalize();
-						tfc->GetCharacterMovement()->Velocity = OurV * KnockingVelocity;
+                        // À»­¸
+                        FVector OurV = Destination - this->GetActorLocation();
+                        OurV.Normalize();
+                        tfc->GetCharacterMovement()->Velocity = OurV * KnockingVelocity;
                     }
                 }
-				else
-				{
-					AttackCollision.RemoveAt(i);
-					i--;
-				}
+                else
+                {
+                    AttackCollision.RemoveAt(i);
+                    i--;
+                }
             }
             StateDeltaSeconds = 0;
             FightStaus = EFightStausEnum::AttackEnding;
@@ -270,7 +279,7 @@ void AFightCharacter::Tick(float DeltaSeconds)
                 Sprite->SetFlipbook(PF_Attacking1);
                 AttackingEvent(this);
             }
-            else
+			else if (this->GetController())
             {
                 UNavigationSystem::SimpleMoveToLocation(this->GetController(), Destination);
                 FightStaus = EFightStausEnum::Walking;
@@ -296,13 +305,13 @@ void AFightCharacter::Tick(float DeltaSeconds)
 
 void AFightCharacter::SetFaceBack()
 {
-	Sprite->SetRelativeScale3D(FVector(-1, 1, 1));
-	FVector arl = AttackBox->RelativeLocation;
-	arl.X = -arl.X;
-	AttackBox->SetRelativeLocation(arl);
-	FVector brl = BodyBox->RelativeLocation;
-	brl.X = -brl.X;
-	BodyBox->SetRelativeLocation(brl);
+    Sprite->SetRelativeScale3D(FVector(-1, 1, 1));
+    FVector arl = AttackBox->RelativeLocation;
+    arl.X = -arl.X;
+    AttackBox->SetRelativeLocation(arl);
+    FVector brl = BodyBox->RelativeLocation;
+    brl.X = -brl.X;
+    BodyBox->SetRelativeLocation(brl);
 }
 
 void AFightCharacter::SetDestination(FVector dst)

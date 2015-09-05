@@ -66,8 +66,8 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
             text = longString.Mid(last + 1, i - last - 1);
             tmp->ShowText = text;
             int32 findchr = 0;
-			// ¡m
-			if (text[0] == L'\u300A')
+            // ¡m
+            if(text[0] == L'\u300A')
             {
                 tmp->Effect = NewObject<UAVGCommend>();
                 FString commend = text.Mid(1, text.Len() - 5);
@@ -82,6 +82,25 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
                 {
                     tmp->HasCommend = true;
                     tmp->Effect->EffectId = ETextEffectEnum::LightCurtain;
+                }
+                else if(commend.Left(6) == "choose")
+                {
+                    tmp->HasCommend = true;
+                    tmp->Effect->EffectId = ETextEffectEnum::Choose;
+                    int32 dquotes[6];
+                    commend.FindChar(L'\"', dquotes[0]);
+                    for(int i = 1; i < 6; ++i)
+                    {
+                        FString strtmp = commend.Mid(dquotes[i - 1] + 1);
+                        strtmp.FindChar(L'\"', dquotes[i]);
+                        dquotes[i] += dquotes[i - 1] + 1;
+                    }
+                    FString choose1 = commend.Mid(dquotes[0] + 1, dquotes[1] - dquotes[0] - 1);
+                    FString choose2 = commend.Mid(dquotes[2] + 1, dquotes[3] - dquotes[2] - 1);
+                    FString choose3 = commend.Mid(dquotes[4] + 1, dquotes[5] - dquotes[4] - 1);
+                    tmp->Effect->ChooseParmeter1 = choose1;
+                    tmp->Effect->ChooseParmeter2 = choose2;
+                    tmp->Effect->ChooseParmeter3 = choose3;
                 }
                 else if(commend.Left(4) == "wait")
                 {
@@ -111,15 +130,15 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
                     int32 dquotes2;
                     commend.FindLastChar(L'\"', dquotes2);
                     FString midtext = commend.Mid(dquotes1 + 1, dquotes2 - dquotes1 - 1);
-					commend = commend.Mid(dquotes2 + 1);
-					char* str = TCHAR_TO_ANSI(*commend);
+                    commend = commend.Mid(dquotes2 + 1);
+                    char* str = TCHAR_TO_ANSI(*commend);
                     sscanf(str, "%f", &time);
                     tmp->Effect->Parmeter1 = time;
-					tmp->Effect->Parmeter2 = midtext;
+                    tmp->Effect->Parmeter2 = midtext;
                 }
             }
-			// ¡G
-			else if (text.FindChar(L'\uFF1A', findchr))
+            // ¡G
+            else if(text.FindChar(L'\uFF1A', findchr))
             {
                 tmp->ShowName = text.Left(findchr);
                 tmp->ShowText = text.Mid(findchr + 1);
@@ -138,45 +157,45 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
 
 bool UAVGBlueprintFunctionLibrary::MusicStringCmp(FString s1, FString s2)
 {
-	int32 l1 = s1.Len();
-	int32 l2 = s2.Len();
-	if (l1 > l2)
-	{
-		l1 = l2;
-	}
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, "l1: " + FString::FromInt(l1));
-	bool cmp = true;
-	for (int32 i = 0; i < l1; ++i)
-	{
-		if (s1[i] != s2[i])
-		{
-			cmp = false;
-			break;
-		}
-	}
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, "s1: " + s1);
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, "s2: " + s2);
-	if (cmp)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, "True");
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, "False");
-	}
-	return cmp;
+    int32 l1 = s1.Len();
+    int32 l2 = s2.Len();
+    if(l1 > l2)
+    {
+        l1 = l2;
+    }
+    GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, "l1: " + FString::FromInt(l1));
+    bool cmp = true;
+    for(int32 i = 0; i < l1; ++i)
+    {
+        if(s1[i] != s2[i])
+        {
+            cmp = false;
+            break;
+        }
+    }
+    GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, "s1: " + s1);
+    GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Yellow, "s2: " + s2);
+    if(cmp)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, "True");
+    }
+    else
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Green, "False");
+    }
+    return cmp;
 }
 
 bool UAVGBlueprintFunctionLibrary::MakeProgressLoadLevel()
 {
-	IStreamingManager::Get().StreamAllResources(10.0f);
-	FLoadingScreenAttributes LoadingScreen;
-	LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
-	LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget(); // <-- test screen that comes with UE
-	//LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
-	//LoadingScreen.bMoviesAreSkippable = true;
-	//LoadingScreen.MoviePaths.Add(TEXT("ggg"));
-	GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
-	GetMoviePlayer()->PlayMovie();
-	return true;
+    IStreamingManager::Get().StreamAllResources(10.0f);
+    FLoadingScreenAttributes LoadingScreen;
+    LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
+    LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget(); // <-- test screen that comes with UE
+    //LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
+    //LoadingScreen.bMoviesAreSkippable = true;
+    //LoadingScreen.MoviePaths.Add(TEXT("ggg"));
+    GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+    GetMoviePlayer()->PlayMovie();
+    return true;
 }

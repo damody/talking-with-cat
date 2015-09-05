@@ -18,7 +18,8 @@ enum class ETextEffectEnum : uint8
 	Fonts,		//改變字型
 	FontsSize,	//改字大小
 	FontColor,	//改字顏色
-	BGM			//背景音樂
+	BGM,		//背景音樂
+	Choose		//選項
 };
 
 UCLASS()
@@ -34,4 +35,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
 	FString Parmeter2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
+	FString ChooseParmeter1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
+	FString ChooseParmeter2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Page")
+	FString ChooseParmeter3;
 };
