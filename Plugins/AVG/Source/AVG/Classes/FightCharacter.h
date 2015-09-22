@@ -59,16 +59,16 @@ public:
 	void SetDestination(FVector dst);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "FightRole")
-	virtual void WalkingEvent(AFightCharacter* Actor);
+	void WalkingEvent(AFightCharacter* Actor);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "FightRole")
-	virtual void AttackingEvent(AFightCharacter* Actor);
+	void AttackingEvent(AFightCharacter* Actor);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "FightRole")
-	virtual void AttackEndingEvent(AFightCharacter* Actor);
+	void AttackEndingEvent(AFightCharacter* Actor);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "FightRole")
-	virtual void DeathingEvent(AFightCharacter* Actor);
+	void DeathingEvent(AFightCharacter* Actor);
 
 	/** Returns Sprite subobject **/
 	FORCEINLINE class UPaperFlipbookComponent* GetSprite() const { return Sprite; }

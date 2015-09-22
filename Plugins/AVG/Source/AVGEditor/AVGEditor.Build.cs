@@ -19,7 +19,8 @@ public class AVGEditor : ModuleRules
 				"InputCore", 
 				"Paper2D", 
 				"UnrealEd",
-                "AVG"
+                "AVG",
+                "ScriptEditorPlugin"
 			}
             );
 		//PublicDependencyModuleNames			

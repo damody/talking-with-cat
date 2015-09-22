@@ -8,6 +8,7 @@
 #include "RoleManager.h"
 #include "RoleManagerActor.h"
 #include "RoleManagerComponent.h"
+#include "StoryManager.h"
 
 
 DECLARE_LOG_CATEGORY_EXTERN(AVG, Log, All); 

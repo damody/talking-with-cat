@@ -18,6 +18,7 @@ public class AVG : ModuleRules
 				"Engine", 
 				"InputCore", 
 				"Paper2D", 
+                "ScriptPlugin"
 			}
 			);
 	}

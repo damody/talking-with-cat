@@ -70,7 +70,7 @@ TArray<UTextPage*> UAVGBlueprintFunctionLibrary::SplitCheaper(FString longString
             if(text[0] == L'\u300A')
             {
                 tmp->Effect = NewObject<UAVGCommend>();
-                FString commend = text.Mid(1, text.Len() - 5);
+                FString commend = text.Mid(1, text.Len());
                 commend = commend.ToLower();
                 GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, commend);
                 if(commend == "inside story")

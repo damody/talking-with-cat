@@ -13,11 +13,15 @@ public class Matthiola : ModuleRules
         "InputCore", 
         "Paper2D",
         "AVG",
-        "MoviePlayer"
+        "MoviePlayer",
+        "UMG", 
+        "Slate",
+        "SlateCore", 
+        "ScriptPlugin"
 		});
         if (UEBuildConfiguration.bBuildEditor)
         {
-            PublicDependencyModuleNames.AddRange(new string[] {"AVGEditor"});
+            PublicDependencyModuleNames.AddRange(new string[] {"AVGEditor", "ScriptEditorPlugin"});
         }
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
